@@ -1,1 +1,1 @@
-# interaction-design
+# Interaction Design (IxD)
