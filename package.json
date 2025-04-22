@@ -1,0 +1,25 @@
+{
+  "name": "interaction-design",
+  "version": "1.0.0",
+  "description": "## Prototype 1 [emotional-support-mirror](emotional-support-mirror) using: - [p5js](https://p5js.org/) - [ml5js](https://ml5js.org/) - [annyang!](https://www.talater.com/annyang/)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dxstiny/interaction-design.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dxstiny/interaction-design/issues"
+  },
+  "homepage": "https://github.com/dxstiny/interaction-design#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "serialport": "^13.0.0"
+  }
+}
