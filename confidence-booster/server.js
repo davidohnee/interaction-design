@@ -16,20 +16,15 @@ const arduino = new SerialPort({
 app.use(express.json());
 
 app.post('/trigger', (req, res) => {
-    if (!arduino.isOpen) {
-        console.error('Port ist nicht geöffnet!');
-        return res.status(500).send('Port geschlossen');
-    }
+    const signal = req.body?.type || '1';
 
-    arduino.write('1', (err) => {
-        if (err) {
-            console.error('Fehler beim Senden:', err.message);
-            return res.sendStatus(500);
-        }
-        console.log('Signal an Arduino gesendet');
+    arduino.write(signal, (err) => {
+        if (err) return res.status(500).send('Error');
         res.sendStatus(200);
     });
 });
+
+
 
 
 app.listen(port, () => {
