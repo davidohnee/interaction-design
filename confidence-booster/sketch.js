@@ -3,16 +3,19 @@ new Vue({
             vuetify: new Vuetify(),
             data: {
                 wordActions: [
-                    { phrase: 'ähm', type: '1x vibrieren', saved: true },
-                    { phrase: 'ich denke', type: '2x vibrieren', saved: true },
-                    { phrase: 'vielleicht', type: '2 Sekunden vibrieren', saved: true }
+                    { phrase: 'ähm', type: '1', saved: true },
+                    { phrase: 'ich denke', type: '2', saved: true },
+                    { phrase: 'vielleicht', type: 'L', saved: true }
+                ],
+                vibratingTypes: [
+                    { text: '1x vibrieren', value: '1' },
+                    { text: '2x vibrieren', value: '2' },
+                    { text: '2 Sekunden vibrieren', value: 'L' }
                 ]
             },
             mounted() {
                 if (annyang) {
                     annyang.setLanguage('de-DE');
-
-                    // Nur gespeicherte Einträge registrieren
                     const initialCommands = {};
                     this.wordActions.forEach(item => {
                         if (item.saved && item.phrase.trim()) {
@@ -20,15 +23,13 @@ new Vue({
                         }
                     });
                     annyang.addCommands(initialCommands);
-
                     annyang.start();
                     console.log('Voice recognition started...');
                 }
             },
-
             methods: {
                 addEntry() {
-                    this.wordActions.push({phrase: '', type: '1x vibrieren', saved: false});
+                    this.wordActions.push({ phrase: '', type: '1', saved: false });
                 },
                 removeEntry(index) {
                     const phrase = this.wordActions[index].phrase.trim();
@@ -40,12 +41,8 @@ new Vue({
                 saveEntry(index) {
                     const item = this.wordActions[index];
                     const phrase = item.phrase.trim();
-                    if (!phrase || !item.type) {
-                        return;
-                    }
-
+                    if (!phrase || !item.type) return;
                     item.saved = true;
-
                     if (annyang) {
                         const command = {};
                         command[phrase] = () => this.triggerVibration(item.type);
@@ -57,11 +54,10 @@ new Vue({
                     fetch('http://localhost:3000/trigger', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ type })
+                        body: JSON.stringify({ type }) // direkt: '1', '2', 'L'
                     })
                         .then(() => console.log('Vibration ausgelöst!'))
                         .catch(err => console.error('Fehler beim Senden:', err));
                 }
-
             }
         });

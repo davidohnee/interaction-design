@@ -22,13 +22,17 @@
                       v-model="item.phrase"
                       label="Wort oder Satz"
                       outlined
+                      :disabled="item.saved"
               ></v-text-field>
 
               <v-select
                       v-model="item.type"
-                      :items="['1x vibrieren', '2x vibrieren', '2 Sekunden vibrieren']"
+                      :items="vibratingTypes"
+                      item-text="text"
+                      item-value="value"
                       label="Vibrationsart"
                       outlined
+                      :disabled="item.saved"
               ></v-select>
 
               <v-btn color="success" dark @click="saveEntry(index)" v-if="!item.saved">
