@@ -54,11 +54,10 @@ new Vue({
                     }
                 },
                 triggerVibration(type) {
-                    // Schicke den „sprechenden“ Typ wie „1x vibrieren“ – Server übernimmt das Mapping
                     fetch('http://localhost:3000/trigger', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ type }) // ← sende: „1x vibrieren“ oder „2 Sekunden vibrieren“
+                        body: JSON.stringify({ type })
                     })
                         .then(() => console.log('Vibration ausgelöst!'))
                         .catch(err => console.error('Fehler beim Senden:', err));
