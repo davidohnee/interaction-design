@@ -85,6 +85,13 @@ const setRandomPhrase = () => {
   return currentPhrase;
 };
 
+function linearGradient(x1, y1, x2, y2, col1, col2) {
+  let grad = drawingContext.createLinearGradient(x1, y1, x2, y2);
+  grad.addColorStop(0, col1);
+  grad.addColorStop(1, col2);
+  drawingContext.fillStyle = grad;
+}
+
 function setup() {
   createCanvas(capturewidth, captureheight);
 
@@ -116,26 +123,26 @@ function gotFaces(error, result) {
 }
 
 function draw() {
+  fill("black");
+  stroke("magenta");
+  rect(0, 0, width, height);
+  line(0, 0, width, height);
+  line(0, height, width, 0);
+  noStroke();
+
   image(capture, 0, 0, width, height);
 
   capture.loadPixels();
   push();
 
-  fill("white");
+  linearGradient(0,0,0,height / 2, "rgba(0,0,0,0.8)", "transparent")
+  rect(0, 0, width, height);
+
+  drawingContext.fillStyle = "white";
   textSize(16);
-  drawingContext.shadowOffsetX = 0;
-  drawingContext.shadowOffsetY = 0;
-  drawingContext.shadowBlur = 20;
-  drawingContext.shadowColor = "black";
 
   if (detections.length > 0) {
     for (i = 0; i < detections.length; i++) {
-      var points = detections[i].landmarks.positions;
-
-      for (j = 0; j < points.length; j++) {
-        circle(points[j]._x, points[j]._y, 5);
-      }
-
       const detection = detections[i];
 
       push();
@@ -153,7 +160,7 @@ function draw() {
         setRandomPhrase();
       }
 
-      text(`Repeat after me: "${currentPhrase}"`, 40, 30);
+      text(`Say  "${currentPhrase}"`, 40, 30);
     }
   }
   pop();
@@ -161,17 +168,5 @@ function draw() {
 
 if (annyang) {
   annyang.debug(true);
-
-  // Let's define our first command. First the text we expect, and then the function it should call
-  var commands = {
-    "i am worth it": function () {
-      console.log("i am worth it", currentEmotion);
-    },
-  };
-
-  // Add our commands to annyang
-  annyang.addCommands(commands);
-
-  // Start listening. You can call this here, or attach this call to an event, button, etc.
   annyang.start();
 }
