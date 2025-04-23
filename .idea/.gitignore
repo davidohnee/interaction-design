@@ -2,12 +2,6 @@
 .idea/
 *.iml
 
-# Node.js dependencies
-node_modules/
-
-# Package lock file
-package-lock.json
-
 # System-specific
 .DS_Store
 

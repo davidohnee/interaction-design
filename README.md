@@ -106,5 +106,3 @@ Der Confidence Booster erkennt unsichere Sprachmuster wie "ähm", "vielleicht" o
 
 ## ✨ Idee & Umsetzung
 Dieses Projekt wurde im Rahmen des Interaction Design Moduls umgesetzt.
-
-Mit ❤️ von [deinem Namen hier einfügen]
