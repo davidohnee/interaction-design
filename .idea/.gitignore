@@ -1,0 +1,11 @@
+# IntelliJ project settings
+.idea/
+*.iml
+
+# System-specific
+.DS_Store
+
+# Optional: Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
