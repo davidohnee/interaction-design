@@ -9,12 +9,11 @@ app.use(cors());
 app.use(express.json());
 
 const arduino = new SerialPort({
-                                   path: '/dev/cu.usbmodem21301',
+                                   path: '/dev/cu.usbmodem1301',
                                    baudRate: 9600
                                });
 
 app.use(express.json());
-
 app.post('/trigger', (req, res) => {
     const signal = req.body?.type || '1';
 
