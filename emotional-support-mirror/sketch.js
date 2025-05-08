@@ -7,60 +7,72 @@ let detections = [];
 
 let phrases = {
   neutral: [
-    "I am enough as I am",
-    "I trust myself to handle today",
-    "I am grounded",
-    "I am present",
-    "I am capable",
-    "I'm open to whatever good may come today",
+    "I am enough as I am.",
+    "I trust myself to handle today.",
+    "I am grounded.",
+    "I am present.",
+    "I am capable.",
+    "I am open to whatever good may come today.",
   ],
   happy: [
-    "I deserve this joy",
-    "I am full of life and it shows",
-    "I am grateful for this moment and all that brought me here",
-    "I will carry this light with me today",
+    "I deserve this joy.",
+    "I am full of life and it shows.",
+    "I am grateful for this moment and all that brought me here.",
+    "I will carry this light with me today.",
   ],
   sad: [
-    "It's okay to feel this",
-    "I am still whole",
-    "I am allowed to take it slow today",
-    "My feelings are valid and they will pass",
-    "Even on hard days I am worthy of love",
+    "It is okay to feel this.",
+    "I am still whole.",
+    "I am allowed to take it slow today.",
+    "My feelings are valid and they will pass.",
+    "Even on hard days I am worthy of love.",
   ],
   angry: [
-    "I acknowledge my anger",
-    "I choose how to use it",
-    "I am in control of my emotions",
-    "My voice matters",
-    "My boundaries matter",
-    "I can respond with clarity and strength",
+    "I acknowledge my anger.",
+    "I choose how to use it.",
+    "I am in control of my emotions.",
+    "My voice matters.",
+    "My boundaries matter.",
+    "I can respond with clarity and strength.",
   ],
   fearful: [
-    "I am safe in this moment",
-    "I face fear with courage and self-trust",
-    "I don't have to know everything to take the next step",
-    "I have faced hard things before",
-    "I can do it again",
+    "I am safe in this moment.",
+    "I face fear with courage and self-trust.",
+    "I don't have to know everything to take the next step.",
+    "I have faced hard things before.",
+    "I can do it again.",
   ],
   disgusted: [
-    "I am not defined by what hurts or disappoints me",
-    "I let go of what no longer serves me",
-    "I choose to honor my values and my body",
-    "I am worthy, always",
+    "I am not defined by what hurts or disappoints me.",
+    "I let go of what no longer serves me.",
+    "I choose to honor my values and my body.",
+    "I am worthy, always.",
   ],
   surprised: [
-    "I can handle unexpected things with grace",
-    "I allow myself to feel then move forward",
-    "Change is part of growth - I am adaptable",
-    "This moment is new and so am I",
+    "I can handle unexpected things with grace.",
+    "I allow myself to feel then move forward.",
+    "Change is part of growth - I am adaptable.",
+    "This moment is new and so am I.",
   ],
 };
 
+let expired = false;
+let expireTimeout = null;
 let currentPhrase = null;
-
 let currentEmotion = "neutral";
 
 const setRandomPhrase = () => {
+  if (expired) return;
+
+  if (expireTimeout) {
+    clearTimeout(expireTimeout);
+  }
+  expireTimeout = setTimeout(() => {
+    expired = true;
+    currentPhrase = null;
+    annyang.removeCommands();
+  }, 10000);
+
   const choices = phrases[currentEmotion] ?? [];
 
   if (!choices.length) return;
@@ -76,10 +88,7 @@ const setRandomPhrase = () => {
   currentPhrase = newPhrase;
 
   annyang.addCommands({
-    [currentPhrase]: () => {
-      console.log("very good!");
-      setRandomPhrase();
-    },
+    [currentPhrase]: setRandomPhrase,
   });
 
   return currentPhrase;
@@ -135,7 +144,7 @@ function draw() {
   capture.loadPixels();
   push();
 
-  linearGradient(0,0,0,height / 2, "rgba(0,0,0,0.8)", "transparent")
+  linearGradient(0, 0, 0, height / 2, "rgba(0,0,0,0.8)", "transparent")
   rect(0, 0, width, height);
 
   drawingContext.fillStyle = "white";
@@ -160,8 +169,17 @@ function draw() {
         setRandomPhrase();
       }
 
-      text(`Say  "${currentPhrase}"`, 40, 30);
+      if (!expired) {
+        text(`You look ${currentEmotion}.`, 40, 30);
+        text(`Say  "${currentPhrase}"`, 40, 50);
+      }
     }
+  } else {
+    currentPhrase = null;
+    expired = false;
+    clearTimeout(expireTimeout);
+    expireTimeout = null;
+    annyang.removeCommands();
   }
   pop();
 }
