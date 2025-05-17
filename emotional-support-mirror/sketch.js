@@ -65,9 +65,19 @@ let expired = false;
 let expireTimeout = null;
 let currentPhrase = null;
 let currentEmotion = "neutral";
+var audio = new Audio("success_2.wav");
+
+var playSound = function () {
+  audio.currentTime = 0;
+  audio.play();
+};
 
 const setRandomPhrase = () => {
   if (expired) return;
+
+  if (currentPhrase) {
+    playSound();
+  }
 
   if (expireTimeout) {
     clearTimeout(expireTimeout);
