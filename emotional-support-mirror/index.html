@@ -1,20 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.min.js"></script>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/gh/ml5js/Intro-ML-Arts-IMA@ml5-build-10-7-19/ml5_build/ml5.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/ml5js/Intro-ML-Arts-IMA@ml5-build-10-7-19/ml5_build/ml5.min.js"></script>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <meta charset="utf-8" />
-  </head>
-  <body>
-    <main>
-      <h1>Emotional Support Mirror</h1>
-    </main>    
-    <script src="sketch.js"></script>
-  </body>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="style.css"
+        />
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <h1>Emotional Support Mirror</h1>
+        <main class="loading"></main>
+        <details class="state">
+            <summary>Debug</summary>
+            <p id="p5js">
+                <span class="err"> Program could not be loaded </span>
+                <span class="success"> Program loaded </span>
+            </p>
+            <p id="cam">
+                <span class="err"> Camera could not be loaded </span>
+                <span class="success"> Camera loaded </span>
+            </p>
+            <p id="mic">
+                <span class="err"> Voice input could not be loaded </span>
+                <span class="success"> Voice input loaded </span>
+            </p>
+        </details>
+        <script src="sketch.js"></script>
+    </body>
 </html>

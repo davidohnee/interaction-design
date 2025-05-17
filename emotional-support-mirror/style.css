@@ -1,17 +1,92 @@
 html,
 body {
-  margin: 0;
-  padding: 0;
-  font-family: system-ui, sans-serif;
-  background: black;
-  color: white;
-}
-canvas {
-  display: block;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, sans-serif;
+    background: black;
+    color: white;
+    height: 100svh;
+    place-content: center;
+    place-items: center;
+    isolation: isolate;
 }
 
 main {
-  height: 100svh;
-  place-content: center;
-  place-items: center;
+    display: block;
+    width: 640px;
+    height: 480px;
+}
+
+canvas {
+    display: block;
+}
+
+summary {
+    cursor: pointer;
+}
+
+.state {
+    width: 640px;
+    margin-top: 1em;
+}
+
+.success {
+    display: none;
+}
+
+@property --grid-gradient-angle {
+    syntax: "<angle>";
+    initial-value: 30deg;
+    inherits: false;
+}
+
+/* !prefers reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+    .loading {
+        position: relative;
+        background: black;
+    }
+
+    .loading::before {
+        content: "abc";
+        position: absolute;
+        inset: 0;
+        background: magenta;
+        transition: all 0.2s ease-in-out;
+        z-index: -2;
+        border-radius: inherit;
+        filter: blur(7px);
+        opacity: 0.2;
+    }
+
+    @keyframes grid-rotate-gradient {
+        0% {
+            --grid-gradient-angle: 0deg;
+        }
+        100% {
+            --grid-gradient-angle: 360deg;
+        }
+    }
+
+    .loading::after {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        transition: all 0.2s ease-in-out;
+        z-index: -1;
+        border-radius: inherit;
+        --colour: magenta;
+        opacity: 0.7;
+        transition: all 0.5s;
+
+        background: conic-gradient(
+            from var(--grid-gradient-angle),
+            transparent 0deg,
+            var(--colour) 30deg 60deg,
+            transparent 120deg 150deg,
+            var(--colour) 210deg 240deg,
+            transparent 300deg 330deg
+        );
+        animation: grid-rotate-gradient 7s linear infinite;
+    }
 }

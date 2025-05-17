@@ -56,6 +56,11 @@ let phrases = {
   ],
 };
 
+const toggleErrSuccess = (containerElement, success = true) => {
+  containerElement.querySelector(".err").style.display = success ? "none" : "unset";
+  containerElement.querySelector(".success").style.display = success ? "unset" : "none";
+}
+
 let expired = false;
 let expireTimeout = null;
 let currentPhrase = null;
@@ -102,7 +107,14 @@ function linearGradient(x1, y1, x2, y2, col1, col2) {
 }
 
 function setup() {
+  toggleErrSuccess(document.querySelector("#p5js"))
   createCanvas(capturewidth, captureheight);
+
+  if (typeof annyang !== "undefined") {
+    annyang.debug(true);
+    annyang.start();
+    toggleErrSuccess(document.querySelector("#mic"), annyang.isListening())
+  }
 
   capture = createCapture(VIDEO);
   capture.position(0, 0);
@@ -134,7 +146,6 @@ function gotFaces(error, result) {
 function draw() {
   fill("black");
   stroke("magenta");
-  rect(0, 0, width, height);
   line(0, 0, width, height);
   line(0, height, width, 0);
   noStroke();
@@ -142,6 +153,14 @@ function draw() {
   image(capture, 0, 0, width, height);
 
   capture.loadPixels();
+
+  if (capture.pixels[0] > 0) {
+    if (typeof annyang !== "undefined" && annyang.isListening()) {
+      document.querySelector("main").classList.remove("loading");
+    }
+    toggleErrSuccess(document.querySelector("#cam"))
+  }
+
   push();
 
   linearGradient(0, 0, 0, height / 2, "rgba(0,0,0,0.8)", "transparent")
@@ -182,9 +201,4 @@ function draw() {
     annyang.removeCommands();
   }
   pop();
-}
-
-if (annyang) {
-  annyang.debug(true);
-  annyang.start();
 }
