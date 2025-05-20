@@ -131,7 +131,43 @@ window.addEventListener('DOMContentLoaded', () => {
         // Play music & start annyang
         document.getElementById('bg-music').play();
         if (annyang) {
+            annyang.debug(true);
             annyang.start({ autoRestart: true, continuous: true });
+
+            // register _all_ phrases as regex commands that ignore trailing punctuation:
+            Object.values(phrases).flat().forEach(phrase => {
+                // escape any regex-special chars
+                const esc = phrase.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                // allow an optional ., ! or ? at the end
+                const re  = new RegExp(`^${esc}[.?!]?$`, 'i');
+                annyang.addCommands({ [re]: setRandomPhrase });
+            });
+            annyang.addCallback('result', phrasesArray => {
+                // Normalize the current target phrase once:
+                const target = currentPhrase
+                    .trim()
+                    .replace(/[.?!]+$/, '')       // strip trailing punctuation
+                    .toLowerCase();
+
+                // Look through every hypothesis from annyang:
+                for (let raw of phrasesArray) {
+                    const spoken = raw
+                        .trim()
+                        .replace(/[.?!]+$/, '')
+                        .toLowerCase();
+
+                    console.log(`Heard: "${spoken}" vs target: "${target}"`);
+                    if (spoken === target) {
+                        // we found a match—fire your handler and stop checking
+                        return setRandomPhrase();
+                    }
+                }
+            });
+
+
+            annyang.addCallback('error',           err => console.error('Speech error:', err));
+            annyang.addCallback('permissionDenied',()  => console.warn('User denied mic'));
+            // etc…
         }
     });
 
@@ -146,26 +182,27 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 function startExperience() {
-    // fade‐out overlay
-    const overlay = document.getElementById('welcome-screen');
-    overlay.classList.add('fade-out');
-    overlay.addEventListener('transitionend', () => {
-        overlay.style.display = 'none';
+    // … fade-out & music …
+
+    if (!annyang) return;
+    annyang.debug(true);
+    annyang.start({ autoRestart:true, continuous:true });
+
+    // — REGISTER ALL PHRASES AS REGEX ONCE —
+    const regexCommands = {};
+    Object.values(phrases).flat().forEach(phrase => {
+        const esc = phrase.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        // anchor start/end, allow optional punctuation, case-insensitive:
+        const re  = new RegExp(`^${esc}[.?!]?$`, 'i');
+        regexCommands[re] = setRandomPhrase;
     });
+    annyang.addCommands(regexCommands);
 
-    // play background music
-    document.getElementById('bg-music').play();
-
-    // init annyang with continuous listening
-    if (typeof annyang !== 'undefined') {
-        annyang.debug(true);
-        annyang.start({autoRestart: true, continuous: true});
-        annyang.addCallback('error', err => console.error('Speech error:', err));
-        annyang.addCallback('start', () => console.log('Speech recognition started'));
-        annyang.addCallback('end', () => console.log('Speech recognition ended'));
-        annyang.addCallback('permissionDenied', () => console.warn('User denied mic'));
-    }
+    annyang.addCallback('error',           e => console.error(e));
+    annyang.addCallback('permissionDenied',() => console.warn('Mic denied'));
 }
+
+
 
 var playSound = function () {
     audio.currentTime = 0;
@@ -178,7 +215,6 @@ const setRandomPhrase = () => {
     }
 
     if (currentPhrase) {
-        console.log(`Phrase "${currentPhrase}" spoken.`);
         playSound();
     }
 
@@ -207,9 +243,9 @@ const setRandomPhrase = () => {
 
     currentPhrase = newPhrase;
 
-    annyang.addCommands({
-                            [currentPhrase]: setRandomPhrase,
-                        });
+    // annyang.addCommands({
+    //                         [currentPhrase]: setRandomPhrase,
+    //                     });
 
     return currentPhrase;
 };
