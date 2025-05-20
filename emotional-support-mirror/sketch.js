@@ -182,24 +182,25 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 function startExperience() {
-    // … fade-out & music …
+    const overlay = document.getElementById('welcome-screen');
+    overlay.classList.add('fade-out');
+    overlay.addEventListener('transitionend', () => overlay.style.display = 'none');
+    document.getElementById('bg-music').play();
+    if (annyang) startAnnyang();
+}
 
-    if (!annyang) return;
+function startAnnyang() {
     annyang.debug(true);
-    annyang.start({ autoRestart:true, continuous:true });
-
-    // — REGISTER ALL PHRASES AS REGEX ONCE —
+    annyang.start({ autoRestart: true, continuous: true });
     const regexCommands = {};
     Object.values(phrases).flat().forEach(phrase => {
         const esc = phrase.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-        // anchor start/end, allow optional punctuation, case-insensitive:
         const re  = new RegExp(`^${esc}[.?!]?$`, 'i');
         regexCommands[re] = setRandomPhrase;
     });
     annyang.addCommands(regexCommands);
-
-    annyang.addCallback('error',           e => console.error(e));
-    annyang.addCallback('permissionDenied',() => console.warn('Mic denied'));
+    annyang.addCallback('error', e => console.error(e));
+    annyang.addCallback('permissionDenied', () => console.warn('Mic denied'));
 }
 
 
@@ -242,10 +243,6 @@ const setRandomPhrase = () => {
     annyang.removeCommands();
 
     currentPhrase = newPhrase;
-
-    // annyang.addCommands({
-    //                         [currentPhrase]: setRandomPhrase,
-    //                     });
 
     return currentPhrase;
 };
