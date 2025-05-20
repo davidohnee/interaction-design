@@ -108,3 +108,12 @@ summary { cursor: pointer; }
 .reload-btn:hover {
     background: #ddd;
 }
+
+
+.prompt {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    color: #a0e7a0;   /* soft green */
+    text-align: center;
+    font-style: italic;
+}
