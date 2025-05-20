@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 const arduino = new SerialPort({
-                                   path: '/dev/cu.usbmodem1301',
+                                   path: '/dev/cu.usbmodem21301',
                                    baudRate: 9600
                                });
 

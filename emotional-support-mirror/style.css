@@ -1,92 +1,110 @@
-html,
-body {
+/* style.css */
+
+/* Layout resets & main canvas area (you already have these) */
+html, body {
     margin: 0;
     padding: 0;
     font-family: system-ui, sans-serif;
     background: black;
     color: white;
     height: 100svh;
+    display: grid;
     place-content: center;
-    place-items: center;
-    isolation: isolate;
 }
-
 main {
-    display: block;
     width: 640px;
     height: 480px;
+    position: relative;
 }
-
 canvas {
     display: block;
 }
 
-summary {
-    cursor: pointer;
-}
-
+/* Debug panel */
 .state {
     width: 640px;
     margin-top: 1em;
 }
+summary { cursor: pointer; }
+.success { display: none; }
 
-.success {
-    display: none;
+/* Background grid “loading” effect (you already have) */
+/* …your @media (prefers-reduced-motion) rules… */
+
+/* —————————————————————————————— */
+/* Welcome overlay & controls */
+/* —————————————————————————————— */
+
+#welcome-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    z-index: 9999;
+
+    /* fade-out helper */
+    transition: opacity 1s ease;
+}
+#welcome-screen.fade-out {
+    opacity: 0;
 }
 
-@property --grid-gradient-angle {
-    syntax: "<angle>";
-    initial-value: 30deg;
-    inherits: false;
+/* welcome text paragraph */
+#welcome-text {
+    font-size: 1.25rem;
+    max-width: 600px;
+    line-height: 1.5;
+    margin: 0;
 }
 
-/* !prefers reduced motion */
-@media (prefers-reduced-motion: no-preference) {
-    .loading {
-        position: relative;
-        background: black;
-    }
+/* Start button */
+#start-btn {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #4caf50;
+    color: #fff;
+    transition: background 0.3s;
+}
+#start-btn:hover {
+    background: #45a049;
+}
 
-    .loading::before {
-        content: "abc";
-        position: absolute;
-        inset: 0;
-        background: magenta;
-        transition: all 0.2s ease-in-out;
-        z-index: -2;
-        border-radius: inherit;
-        filter: blur(7px);
-        opacity: 0.2;
-    }
+/* Skip button (top-right) */
+#skip-btn {
+    position: absolute;
+    top: 1rem;
+    right: 5rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
 
-    @keyframes grid-rotate-gradient {
-        0% {
-            --grid-gradient-angle: 0deg;
-        }
-        100% {
-            --grid-gradient-angle: 360deg;
-        }
-    }
-
-    .loading::after {
-        content: "";
-        position: absolute;
-        inset: -2px;
-        transition: all 0.2s ease-in-out;
-        z-index: -1;
-        border-radius: inherit;
-        --colour: magenta;
-        opacity: 0.7;
-        transition: all 0.5s;
-
-        background: conic-gradient(
-            from var(--grid-gradient-angle),
-            transparent 0deg,
-            var(--colour) 30deg 60deg,
-            transparent 120deg 150deg,
-            var(--colour) 210deg 240deg,
-            transparent 300deg 330deg
-        );
-        animation: grid-rotate-gradient 7s linear infinite;
-    }
+/* Reload button (bottom-right) */
+.reload-btn {
+    position: fixed;
+    bottom: 1rem; right: 1rem;
+    padding: 0.5rem 1rem;
+    background: #eee;
+    border: none;
+    border-radius: 4px;
+    color: #000;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.reload-btn:hover {
+    background: #ddd;
 }
