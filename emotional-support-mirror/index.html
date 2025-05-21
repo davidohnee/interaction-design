@@ -1,50 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <title>Emotional Support Mirror</title>
+    <head>
+        <meta charset="utf-8" />
+        <title>Emotional Support Mirror</title>
 
-    <!-- p5, ml5, annyang, your CSS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/ml5js/Intro-ML-Arts-IMA@ml5-build-10-7-19/ml5_build/ml5.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
-    <link rel="stylesheet" href="style.css"/>
+        <!-- p5, ml5, annyang, your CSS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/ml5js/Intro-ML-Arts-IMA@ml5-build-10-7-19/ml5_build/ml5.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+        <link
+            rel="stylesheet"
+            href="style.css"
+        />
 
-    <style>
+        <style></style>
+    </head>
+    <body>
+        <h1>Emotional Support Mirror</h1>
 
-    </style>
-</head>
-<body>
-<h1>Emotional Support Mirror</h1>
+        <!-- Welcome Overlay -->
+        <div id="welcome-screen">
+            <button id="skip-btn">Skip →</button>
+            <p id="welcome-text"></p>
+            <button id="start-btn">Start</button>
+            <button class="reload-btn">Reload</button>
+        </div>
 
-<!-- Welcome Overlay -->
-<div id="welcome-screen">
-    <button id="skip-btn">Skip →</button>
-    <p id="welcome-text"></p>
-    <button id="start-btn">Start</button>
-    <button class="reload-btn">Reload</button>
+        <button class="reload-btn">Reload</button>
+        <button
+            onclick="toggleBackgroundMusic(event)"
+            class="mute-btn"
+        >
+            Pause music
+        </button>
 
-</div>
+        <!-- Hidden background music -->
+        <audio
+            id="bg-music"
+            src="smooth-music.mp3"
+            loop
+            preload="auto"
+        ></audio>
 
-<button class="reload-btn">Reload</button>
+        <main class="loading"></main>
+        <div
+            id="affirmation-prompt"
+            class="prompt"
+        ></div>
+        <details class="state">
+            <summary>Debug</summary>
+            <p id="p5js">
+                <span class="err"> Program could not be loaded </span
+                ><span class="success"> Program loaded </span>
+            </p>
+            <p id="cam">
+                <span class="err"> Camera could not be loaded </span
+                ><span class="success"> Camera loaded </span>
+            </p>
+            <p id="mic">
+                <span class="err"> Voice input could not be loaded </span
+                ><span class="success"> Voice input loaded </span>
+            </p>
+        </details>
 
-
-
-<!-- Hidden background music -->
-<audio id="bg-music" src="smooth-music.mp3" loop preload="auto"></audio>
-
-<main class="loading"></main>
-<div id="affirmation-prompt" class="prompt">
-</div>
-<details class="state">
-    <summary>Debug</summary>
-    <p id="p5js"><span class="err"> Program could not be loaded </span><span class="success"> Program loaded </span></p>
-    <p id="cam"><span class="err"> Camera could not be loaded </span><span class="success"> Camera loaded </span></p>
-    <p id="mic"><span class="err"> Voice input could not be loaded </span><span class="success"> Voice input loaded </span></p>
-</details>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-<script src="sketch.js"></script>
-</body>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+        <script src="sketch.js"></script>
+    </body>
 </html>

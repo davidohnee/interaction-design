@@ -1,7 +1,8 @@
 /* style.css */
 
 /* Layout resets & main canvas area (you already have these) */
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     font-family: system-ui, sans-serif;
@@ -25,8 +26,12 @@ canvas {
     width: 640px;
     margin-top: 1em;
 }
-summary { cursor: pointer; }
-.success { display: none; }
+summary {
+    cursor: pointer;
+}
+.success {
+    display: none;
+}
 
 /* Background grid “loading” effect (you already have) */
 /* …your @media (prefers-reduced-motion) rules… */
@@ -37,9 +42,11 @@ summary { cursor: pointer; }
 
 #welcome-screen {
     position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.85);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -94,9 +101,11 @@ summary { cursor: pointer; }
 }
 
 /* Reload button (bottom-right) */
-.reload-btn {
+.reload-btn,
+.mute-btn {
     position: fixed;
-    bottom: 1rem; right: 1rem;
+    bottom: 1rem;
+    right: 1rem;
     padding: 0.5rem 1rem;
     background: #eee;
     border: none;
@@ -104,16 +113,20 @@ summary { cursor: pointer; }
     color: #000;
     cursor: pointer;
     transition: background 0.3s;
-}
-.reload-btn:hover {
-    background: #ddd;
-}
 
+    &.mute-btn {
+        right: 6rem;
+    }
+
+    &:hover {
+        background: #ddd;
+    }
+}
 
 .prompt {
     margin-top: 1rem;
     font-size: 1.25rem;
-    color: #a0e7a0;   /* soft green */
+    color: #a0e7a0; /* soft green */
     text-align: center;
     font-style: italic;
 }

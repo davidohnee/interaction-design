@@ -343,3 +343,14 @@ function draw() {
     }
     pop();
 }
+
+const toggleBackgroundMusic = (event) => {
+    const bgMusic = document.getElementById('bg-music');
+    if (bgMusic.paused) {
+        bgMusic.play();
+        event.target.innerText = "Pause Music";
+    } else {
+        bgMusic.pause();
+        event.target.innerText = "Play Music";
+    }
+}
