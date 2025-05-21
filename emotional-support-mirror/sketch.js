@@ -2,6 +2,8 @@ let capture;
 let capturewidth = 640;
 let captureheight = 480;
 
+const INACTIVITY_TIMEOUT = 30; // seconds
+
 let faceapi;
 let detections = [];
 const welcomeLines = [
@@ -70,7 +72,7 @@ let expired = false;
 let expireTimeout = null;
 let currentPhrase = null;
 let currentEmotion = "neutral";
-var audio = new Audio("success_2.wav");
+var audio = new Audio("success_3.wav");
 
 function speakLines(lines, onComplete) {
     if (!window.speechSynthesis) {
@@ -132,12 +134,12 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('bg-music').play();
         if (annyang) {
             annyang.debug(true);
-            annyang.start({autoRestart: true, continuous: true});
+            annyang.start({ autoRestart: true, continuous: true });
 
             Object.values(phrases).flat().forEach(phrase => {
                 const esc = phrase.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
                 const re = new RegExp(`^${esc}[.?!]?$`, 'i');
-                annyang.addCommands({[re]: setRandomPhrase});
+                annyang.addCommands({ [re]: setRandomPhrase });
             });
             annyang.addCallback('result', phrasesArray => {
                 const target = currentPhrase
@@ -185,7 +187,7 @@ function startExperience() {
 
 function startAnnyang() {
     annyang.debug(true);
-    annyang.start({autoRestart: true, continuous: true});
+    annyang.start({ autoRestart: true, continuous: true });
     const regexCommands = {};
     Object.values(phrases).flat().forEach(phrase => {
         const esc = phrase.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -203,6 +205,8 @@ var playSound = function () {
 };
 
 const setRandomPhrase = () => {
+    console.log("setRandomPhrase");
+
     if (expired) {
         return;
     }
@@ -211,10 +215,10 @@ const setRandomPhrase = () => {
         playSound();
 
         confetti({
-                     particleCount: 100,
-                     spread: 70,
-                     origin: {y: 0.6}
-                 });
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
     }
 
     if (expireTimeout) {
@@ -228,7 +232,7 @@ const setRandomPhrase = () => {
         const promptEl = document.getElementById('affirmation-prompt');
         promptEl.textContent =
             "Oops! We didn’t quite catch that—try covering your face with your hands to reset.";
-    }, 10000);
+    }, INACTIVITY_TIMEOUT * 1000);
 
 
     const choices = phrases[currentEmotion] ?? [];
@@ -264,7 +268,7 @@ function setup() {
     createCanvas(capturewidth, captureheight);
     // … camera + faceapi init only …
     capture = createCapture(VIDEO).position(0, 0).hide();
-    faceapi = ml5.faceApi(capture, {withLandmarks: true, withExpressions: true}, faceReady);
+    faceapi = ml5.faceApi(capture, { withLandmarks: true, withExpressions: true }, faceReady);
 }
 
 function faceReady() {
@@ -313,7 +317,7 @@ function draw() {
             push();
 
             const newEmotion = Object.keys(detection.expressions).reduce((a, b) =>
-                                                                             detection.expressions[a] > detection.expressions[b] ? a : b
+                detection.expressions[a] > detection.expressions[b] ? a : b
             );
 
             if (newEmotion != currentEmotion) {
